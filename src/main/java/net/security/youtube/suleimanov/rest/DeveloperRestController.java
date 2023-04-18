@@ -1,10 +1,7 @@
 package net.security.youtube.suleimanov.rest;
 
 import net.security.youtube.suleimanov.model.Developer;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,5 +30,18 @@ public class DeveloperRestController {
                 })
                 .findFirst()
                     .orElse(null);
+    }
+
+    @PostMapping
+    public Developer create(@RequestBody Developer developer) { // RequestBody - принимает значение из тела запроса
+        this.DEVELOPERS.add(developer);
+        return developer;
+    }
+
+    @DeleteMapping("/id")
+    public void deleteById(@PathVariable Long id){
+        this.DEVELOPERS.removeIf(developer -> {
+            return Objects.equals(developer.getId(), id);
+        });
     }
 }
