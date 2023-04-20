@@ -1,6 +1,8 @@
 package net.security.youtube.suleimanov.rest;
 
 import net.security.youtube.suleimanov.model.Developer;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +27,7 @@ public class DeveloperRestController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('developers:read')")
     public Developer getById(@PathVariable Long id){
         return DEVELOPERS.stream().filter(developer -> { return Objects.equals(developer.getId(), id);
                 })
@@ -33,12 +36,14 @@ public class DeveloperRestController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('developers:write')")
     public Developer create(@RequestBody Developer developer) { // RequestBody - принимает значение из тела запроса
         this.DEVELOPERS.add(developer);
         return developer;
     }
 
     @DeleteMapping("/id")
+    @PreAuthorize("hasAuthority('developers:write')")
     public void deleteById(@PathVariable Long id){
         this.DEVELOPERS.removeIf(developer -> {
             return Objects.equals(developer.getId(), id);
